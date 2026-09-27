@@ -1,0 +1,52 @@
+api_version: gbrain-schema-pack-v1
+name: chief-of-staff
+version: 0.0.1
+description: "Stub pack scaffolded by 'gbrain schema init chief-of-staff'. Edit /home/ubuntu/.gbrain/schema-packs/chief-of-staff/pack.yaml then 'gbrain schema validate' + 'gbrain schema use chief-of-staff'."
+gbrain_min_version: 0.39.0
+extends: gbrain-base
+borrow_from: []
+page_types:
+  - name: goal
+    primitive: concept
+    path_prefixes:
+      - goals/
+    aliases:
+      - objective
+      - north-star
+    extractable: true
+    expert_routing: false
+  - name: decision
+    primitive: temporal
+    path_prefixes:
+      - decisions/
+    aliases:
+      - choice
+      - brief-item
+    extractable: true
+    expert_routing: false
+  - name: opportunity
+    primitive: temporal
+    path_prefixes:
+      - opportunities/
+    aliases:
+      - cfp
+      - event-slot
+    extractable: true
+    expert_routing: false
+  - name: brief
+    primitive: temporal
+    path_prefixes:
+      - briefs/
+    aliases:
+      - daily-brief
+    extractable: false
+    expert_routing: false
+link_types: []
+frontmatter_links: []
+takes_kinds:
+  - fact
+  - take
+  - bet
+  - hunch
+enrichable_types: []
+filing_rules: []

@@ -1,0 +1,25 @@
+{
+  "api_version": "gbrain-skillpack-v1",
+  "name": "chief-of-staff",
+  "version": "0.1.0",
+  "description": "A goals layer for GBrain: the brain knows what you know; this pack makes it work on what you want. Goal check, origination, decisions with defaults, a one-page brief, and a taste loop that learns from every answer.",
+  "author": "Raphael Kalandadze",
+  "license": "MIT",
+  "homepage": "https://github.com/rkalandadze/chief-of-staff",
+  "gbrain_min_version": "0.59.0",
+  "skills": ["skills/goal-check", "skills/originate", "skills/decide", "skills/brief", "skills/learn-taste"],
+  "runbooks": {
+    "bootstrap": "runbooks/bootstrap.md"
+  },
+  "changelog": "CHANGELOG.md",
+  "unit_tests": ["test/**/*.test.ts"],
+  "e2e_tests": ["e2e/**/*.test.ts"],
+  "llm_evals": ["evals/*.judge.json"],
+  "routing_evals": [
+    "skills/goal-check/routing-eval.jsonl",
+    "skills/originate/routing-eval.jsonl",
+    "skills/decide/routing-eval.jsonl",
+    "skills/brief/routing-eval.jsonl",
+    "skills/learn-taste/routing-eval.jsonl"
+  ]
+}

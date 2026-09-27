@@ -1,0 +1,6 @@
+{"intent": "build my brief", "expected_skill": "brief"}
+{"intent": "what needs me today", "expected_skill": "brief"}
+{"intent": "morning brief", "expected_skill": "brief"}
+{"intent": "rebuild the brief page", "expected_skill": "brief"}
+{"intent": "what is on my page", "expected_skill": "brief"}
+{"intent": "give me the one page", "expected_skill": "brief"}

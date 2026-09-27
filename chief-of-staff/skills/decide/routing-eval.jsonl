@@ -1,0 +1,6 @@
+{"intent": "what needs my decision today", "expected_skill": "decide"}
+{"intent": "turn this email into a decision", "expected_skill": "decide"}
+{"intent": "what happens if I do nothing about this", "expected_skill": "decide"}
+{"intent": "add a decision with a default and an expiry", "expected_skill": "decide"}
+{"intent": "what is due for a decision", "expected_skill": "decide"}
+{"intent": "decisions due this week", "expected_skill": "decide"}

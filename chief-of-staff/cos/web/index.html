@@ -1,0 +1,603 @@
+<meta charset="utf-8" />
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Chief of Staff · Brief</title>
+    <style>
+      :root {
+        --ink: #111;
+        --mut: #6b6b6b;
+        --line: #e6e6e6;
+        --soft: #f6f6f4;
+        --acc: #1f8a4c;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #fff;
+        color: var(--ink);
+        font:
+          14px/1.45 -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Inter,
+          Helvetica,
+          Arial,
+          sans-serif;
+      }
+      .wrap {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 22px 28px 60px;
+      }
+      header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--ink);
+        padding-bottom: 12px;
+        position: relative;
+      }
+      header:after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -3px;
+        width: 120px;
+        height: 2px;
+        background: var(--acc);
+      }
+      h1 {
+        font-size: 24px;
+        font-weight: 650;
+        letter-spacing: -0.01em;
+        margin: 0;
+      }
+      .sub {
+        color: var(--mut);
+        font-size: 12px;
+        margin-top: 3px;
+      }
+      .sub b {
+        color: var(--ink);
+        font-weight: 600;
+      }
+      .hright {
+        text-align: right;
+        font-size: 12px;
+        color: var(--mut);
+      }
+      .hright .n {
+        font-size: 22px;
+        color: var(--ink);
+        font-weight: 650;
+        display: block;
+        line-height: 1;
+      }
+      h2 {
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--mut);
+        font-weight: 600;
+        margin: 24px 0 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      h2 .hint {
+        letter-spacing: 0;
+        text-transform: none;
+        font-weight: 400;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 330px;
+        gap: 28px;
+      }
+      .strip {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 12px 14px 11px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        background: #fff;
+        transition:
+          transform 0.35s ease,
+          opacity 0.35s ease,
+          max-height 0.4s ease;
+        position: relative;
+      }
+      .card.out {
+        opacity: 0;
+        transform: translateX(40px) scale(0.97);
+      }
+      .card.new {
+        animation: pop 0.6s ease;
+      }
+      @keyframes pop {
+        from {
+          background: #eef7f1;
+        }
+        to {
+          background: #fff;
+        }
+      }
+      .card .top {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .chip {
+        font-size: 11px;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 1px 8px;
+        color: var(--mut);
+        white-space: nowrap;
+      }
+      .chip.k {
+        background: var(--soft);
+        border-color: var(--soft);
+        color: var(--ink);
+      }
+      .chip.exp {
+        color: var(--ink);
+        border-color: #bbb;
+      }
+      .chip.exp.hot {
+        border-color: var(--ink);
+        background: var(--ink);
+        color: #fff;
+      }
+      .chip.g {
+        border-color: var(--acc);
+        color: var(--acc);
+      }
+      .card .t {
+        font-weight: 600;
+        font-size: 14.5px;
+        line-height: 1.3;
+      }
+      .card .t a {
+        color: inherit;
+        text-decoration: none;
+        border-bottom: 1px solid #ccc;
+      }
+      .lbl {
+        font-size: 10.5px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--mut);
+        margin-right: 4px;
+      }
+      .why {
+        color: #333;
+        font-size: 12.5px;
+      }
+      .rec {
+        font-size: 12.5px;
+      }
+      .def {
+        font-size: 12px;
+        color: var(--mut);
+      }
+      .act {
+        display: flex;
+        gap: 6px;
+        margin-top: 3px;
+      }
+      .act input {
+        flex: 1;
+        min-width: 0;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        padding: 5px 8px;
+        font: inherit;
+        font-size: 12px;
+      }
+      button {
+        font: inherit;
+        font-size: 12px;
+        border: 1px solid var(--ink);
+        background: #fff;
+        color: var(--ink);
+        border-radius: 4px;
+        padding: 5px 12px;
+        cursor: pointer;
+      }
+      button.d {
+        background: var(--ink);
+        color: #fff;
+      }
+      button:hover {
+        opacity: 0.8;
+      }
+      .goal {
+        padding: 9px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .goal .row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+      }
+      .goal .nm {
+        font-weight: 600;
+        font-size: 13px;
+      }
+      .bar {
+        height: 4px;
+        background: var(--soft);
+        border-radius: 2px;
+        margin: 6px 0 4px;
+        overflow: hidden;
+      }
+      .bar i {
+        display: block;
+        height: 100%;
+        background: var(--ink);
+        transition: width 0.6s;
+      }
+      .st {
+        font-size: 10.5px;
+        padding: 1px 7px;
+        border-radius: 20px;
+        border: 1px solid var(--line);
+      }
+      .st.on-track {
+        color: var(--acc);
+        border-color: var(--acc);
+      }
+      .st.drifting {
+        color: #8a6d1f;
+        border-color: #d9c68f;
+      }
+      .st.stalled {
+        color: #fff;
+        background: #555;
+        border-color: #555;
+      }
+      .goal .mv {
+        font-size: 11.5px;
+        color: var(--mut);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .goal .mv b {
+        color: var(--ink);
+        font-weight: 500;
+      }
+      .ideas {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+      .idea {
+        border-top: 2px solid var(--ink);
+        padding: 10px 2px 0;
+      }
+      .idea .t {
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 5px;
+      }
+      .idea p {
+        margin: 0 0 6px;
+        font-size: 12.5px;
+        color: #333;
+      }
+      .idea .fs {
+        font-size: 12px;
+        color: var(--mut);
+      }
+      .list {
+        border-top: 1px solid var(--line);
+      }
+      .li {
+        display: flex;
+        gap: 10px;
+        align-items: baseline;
+        padding: 7px 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 13px;
+      }
+      .li .d {
+        font-variant-numeric: tabular-nums;
+        font-size: 11px;
+        color: var(--mut);
+        min-width: 70px;
+      }
+      .li a {
+        color: var(--ink);
+      }
+      .li .x {
+        flex: 1;
+      }
+      .li .rk {
+        font-variant-numeric: tabular-nums;
+        font-weight: 600;
+        min-width: 18px;
+      }
+      .li .sc {
+        font-size: 11px;
+        color: var(--mut);
+        font-variant-numeric: tabular-nums;
+      }
+      .li.up {
+        animation: pop 1.6s ease;
+      }
+      .li .arrow {
+        color: var(--acc);
+        font-size: 11px;
+      }
+      .handled .n {
+        font-size: 30px;
+        font-weight: 650;
+        line-height: 1;
+      }
+      .rules .r {
+        padding: 9px 0;
+        border-bottom: 1px solid var(--line);
+        font-size: 13px;
+      }
+      .rules .r .ev {
+        font-size: 11px;
+        color: var(--mut);
+        margin-top: 3px;
+        font-family: ui-monospace, Menlo, monospace;
+      }
+      .rules .r.fresh {
+        animation: pop 1.6s ease;
+      }
+      .rules .empty {
+        color: var(--mut);
+        font-size: 12.5px;
+        padding: 8px 0;
+      }
+      .two {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 28px;
+      }
+      #toast {
+        position: fixed;
+        left: 50%;
+        bottom: 24px;
+        transform: translateX(-50%) translateY(20px);
+        background: var(--ink);
+        color: #fff;
+        padding: 9px 16px;
+        border-radius: 6px;
+        font-size: 13px;
+        opacity: 0;
+        transition: all 0.3s;
+        max-width: 90%;
+        border-left: 3px solid var(--acc);
+      }
+      #toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+      .foot {
+        margin-top: 30px;
+        color: var(--mut);
+        font-size: 11px;
+        border-top: 1px solid var(--line);
+        padding-top: 10px;
+      }
+      @media (max-width: 900px) {
+        .grid,
+        .two {
+          grid-template-columns: 1fr;
+        }
+        .strip,
+        .ideas {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div>
+          <h1>Chief of Staff · Brief for <span id="date"></span></h1>
+          <div class="sub">memory: <b>GBrain</b> · harness: <b>QM</b> · originates, decides nothing without you</div>
+        </div>
+        <div class="hright"><span class="n" id="openc">–</span>open items ranked</div>
+      </header>
+      <div class="grid">
+        <div>
+          <h2>Only you can do today <span class="hint">recommendation · default · expiry</span></h2>
+          <div class="strip" id="strip"></div>
+          <h2>Next in line <span class="hint">ranked by priority, expiry and what I learned</span></h2>
+          <div class="list" id="queue"></div>
+          <h2>Brought to you, not asked for <span class="hint" id="isrc"></span></h2>
+          <div class="ideas" id="ideas"></div>
+          <h2>Opportunities <span class="hint" id="oppc"></span></h2>
+          <div class="list" id="opps"></div>
+        </div>
+        <aside>
+          <h2>What I learned <button id="reflect">Reflect now</button></h2>
+          <div class="rules" id="rules"></div>
+          <h2>Goals <span class="hint">evidence, last 14 days</span></h2>
+          <div id="goals"></div>
+          <h2>Handled without you</h2>
+          <div class="handled">
+            <div class="n" id="hn"></div>
+            <div class="sub" style="margin: 2px 0 8px">items closed by the system or expired quietly</div>
+            <div class="list" id="hl"></div>
+          </div>
+        </aside>
+      </div>
+      <div class="foot">
+        Every answer becomes a fact with provenance in GBrain (<code>remember</code>, a taste fact with provenance) and
+        updates the decision page. <span id="gq"></span>
+      </div>
+    </div>
+    <div id="toast"></div>
+    <script>
+      const $ = (s) => document.querySelector(s);
+      const esc = (s) =>
+        String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+      let B = null;
+      function fmtDate(d) {
+        if (!d) return "";
+        const x = new Date(d + "T12:00:00");
+        return x.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      }
+      function expChip(c) {
+        if (c.days_left == null) return "";
+        const t =
+          c.days_left <= 0
+            ? "expires today"
+            : c.days_left == 1
+              ? "expires tomorrow"
+              : "expires in " + c.days_left + "d";
+        return `<span class="chip exp ${c.days_left <= 1 ? "hot" : ""}">${t}</span>`;
+      }
+      function toast(t) {
+        const e = $("#toast");
+        e.textContent = t;
+        e.classList.add("show");
+        clearTimeout(e._t);
+        e._t = setTimeout(() => e.classList.remove("show"), 4200);
+      }
+      function card(c, isNew) {
+        return `<div class="card ${isNew ? "new" : ""}" data-id="${c.id}">
+<div class="top"><span class="chip k">${esc(c.kind)}</span>${expChip(c)}<span class="chip g">${esc(c.goal_title)}</span></div>
+<div class="t">${c.link ? `<a href="${esc(c.link)}" target="_blank" rel="noopener">${esc(c.title)}</a>` : esc(c.title)}</div>
+<div class="why">${esc(c.why)}</div>
+<div class="rec"><span class="lbl">${c.default ? "Rec" : "Rec = default"}</span>${esc(c.recommendation)}</div>
+${c.default ? `<div class="def"><span class="lbl">Default</span>${esc(c.default)}</div>` : ""}
+<div class="act"><input placeholder="note (optional)" id="n-${c.id}"><button class="d" onclick="ans('${c.id}','done')">Done</button><button onclick="ans('${c.id}','skip')">Skip</button></div></div>`;
+      }
+      function render(b, prev, shift) {
+        shift = shift || 0;
+        B = b;
+        $("#date").textContent = new Date(b.date + "T12:00:00").toLocaleDateString("en-US", {
+          weekday: "short",
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        });
+        $("#openc").textContent = b.open_count;
+        $("#strip").innerHTML = b.strip
+          .map((c) => card(c, prev && (prev.indexOf(c.id) < 0 || prev.indexOf(c.id) > 3)))
+          .join("");
+        $("#goals").innerHTML = b.goals
+          .map(
+            (
+              g,
+            ) => `<div class="goal"><div class="row"><span class="nm">${esc(g.title)}</span><span class="st ${g.status}">${g.status}</span></div>
+<div class="bar"><i style="width:${Math.max(g.progress, 2)}%"></i></div><div class="mv" title="${esc(g.next_move)}"><b>${g.progress}%</b> · ${g.done} done / ${g.missed} missed · next: ${esc(g.next_move)}</div></div>`,
+          )
+          .join("");
+        $("#isrc").textContent = b.ideas_source == "rules" ? "from the data" : "originated by " + b.ideas_source;
+        $("#ideas").innerHTML = b.ideas
+          .map(
+            (i) =>
+              `<div class="idea"><div class="t">${esc(i.title)}</div><p>${esc(i.why)}</p><div class="fs"><span class="lbl">First step</span>${esc(i.first_step)}</div></div>`,
+          )
+          .join("");
+        const pq = prev || [];
+        $("#queue").innerHTML = b.queue
+          .map((c, i) => {
+            const was = pq.indexOf(c.id);
+            const up = prev && (was < 0 || was > i + 4 + shift);
+            return `<div class="li ${up ? "up" : ""}"><span class="rk">${i + 5}</span><span class="chip k">${esc(c.kind)}</span><span class="x">${esc(c.title.length > 95 ? c.title.slice(0, 95) + "…" : c.title)}</span>${up ? '<span class="arrow">▲ up</span>' : ""}<span class="sc">${c.score}</span></div>`;
+          })
+          .join("");
+        $("#oppc").textContent = b.opportunities.length + " open";
+        $("#opps").innerHTML =
+          b.opportunities
+            .slice(0, 7)
+            .map(
+              (o) =>
+                `<div class="li"><span class="d">${o.days_left != null ? (o.days_left < 0 ? "expired" : "by " + fmtDate(o.expires)) : ""}</span><span class="x">${o.link ? `<a href="${esc(o.link)}" target="_blank" rel="noopener">${esc(o.title)}</a>` : esc(o.title)}</span></div>`,
+            )
+            .join("") || '<div class="li">none open</div>';
+        $("#hn").textContent = b.handled.count;
+        $("#hl").innerHTML = b.handled.latest
+          .map(
+            (h) =>
+              `<div class="li"><span class="d">${fmtDate(h.date)}</span><span class="x">${esc(h.title)}</span></div>`,
+          )
+          .join("");
+        $("#rules").innerHTML = b.rules.length
+          ? b.rules
+              .slice()
+              .reverse()
+              .map(
+                (r, i) =>
+                  `<div class="r ${b._fresh && b._fresh.includes(r.key) ? "fresh" : ""}">${esc(r.text)}<div class="ev">evidence ${r.evidence.join(" · ")} · weight ${esc(
+                    Object.entries(r.weight)
+                      .map(([k, v]) => k + " " + (v > 0 ? "+" : "") + v)
+                      .join(", "),
+                  )}</div></div>`,
+              )
+              .join("")
+          : '<div class="empty">No rules yet. Answer a few cards, then Reflect: rules are learned from what you do, with the decision ids as evidence.</div>';
+        $("#gq").textContent = b.gbrain_queue ? `GBrain writes queued: ${b.gbrain_queue}` : "GBrain in sync.";
+      }
+      async function load() {
+        const r = await fetch("api/brief");
+        render(await r.json());
+      }
+      async function ans(id, verdict) {
+        const el = document.querySelector(`.card[data-id="${id}"]`);
+        const note = ($("#n-" + id) || {}).value || "";
+        if (el) el.classList.add("out");
+        const prev = B.strip.concat(B.queue).map((c) => c.id);
+        const r = await fetch("api/answer", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id, verdict, note }),
+        });
+        const b = await r.json();
+        setTimeout(() => {
+          render(b, prev, 1);
+          toast(
+            (verdict == "done" ? "Done" : "Skipped") +
+              " · saved to GBrain with provenance" +
+              (b.moved_up && b.moved_up.length ? " · up next: " + b.moved_up[0].slice(0, 60) : ""),
+          );
+        }, 350);
+      }
+      $("#reflect").onclick = async () => {
+        const btn = $("#reflect");
+        btn.textContent = "Reflecting…";
+        const prev = B.strip.concat(B.queue).map((c) => c.id);
+        const r = await fetch("api/reflect", { method: "POST" });
+        const b = await r.json();
+        btn.textContent = "Reflect now";
+        b._fresh = (b.new_rules || []).map((x) => x.key);
+        render(b, prev);
+        if (!b.new_rules || !b.new_rules.length) {
+          toast("No new rule yet: need 2 answers that agree");
+          return;
+        }
+        toast(
+          "Learned 1 rule · re-ranked: " +
+            (b.moved_up.length ? "“" + b.moved_up[0].slice(0, 38) + "…” moved up" : "") +
+            (b.moved_down.length ? (b.moved_up.length ? ", " : "") + b.moved_down.length + " moved down" : ""),
+        );
+        setTimeout(load, 30000);
+      };
+      load();
+    </script>
+  </body>
+</html>

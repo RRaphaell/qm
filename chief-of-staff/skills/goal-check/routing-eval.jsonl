@@ -1,0 +1,6 @@
+{"intent": "how am I doing on my goals", "expected_skill": "goal-check"}
+{"intent": "goal check please", "expected_skill": "goal-check"}
+{"intent": "which of my goals is stalled", "expected_skill": "goal-check"}
+{"intent": "what is my next move on goal 3", "expected_skill": "goal-check"}
+{"intent": "am I on track this month", "expected_skill": "goal-check"}
+{"intent": "score my goals against the evidence", "expected_skill": "goal-check"}

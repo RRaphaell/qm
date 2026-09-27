@@ -1,0 +1,6 @@
+{"intent": "any ideas for me today", "expected_skill": "originate"}
+{"intent": "what am I missing", "expected_skill": "originate"}
+{"intent": "what should I be doing that I am not", "expected_skill": "originate"}
+{"intent": "what can you bring me", "expected_skill": "originate"}
+{"intent": "what do I own that I am not using", "expected_skill": "originate"}
+{"intent": "originate", "expected_skill": "originate"}

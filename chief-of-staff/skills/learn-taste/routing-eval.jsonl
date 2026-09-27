@@ -1,0 +1,6 @@
+{"intent": "I did that one", "expected_skill": "learn-taste"}
+{"intent": "skip it, not my lane", "expected_skill": "learn-taste"}
+{"intent": "learn from my answers", "expected_skill": "learn-taste"}
+{"intent": "what have you learned about what I act on", "expected_skill": "learn-taste"}
+{"intent": "train the taste model", "expected_skill": "learn-taste"}
+{"intent": "why did you rank this first", "expected_skill": "learn-taste"}
