@@ -4,9 +4,7 @@ import { appState } from "./shell";
 // Chief of Staff Brief: the one page a person reads. Served by the Chief of Staff
 // runtime (goals, decisions, opportunities, ideas; learns from every answer).
 const BRIEF_URL: string =
-  (import.meta.env.VITE_COS_BRIEF_URL as string | undefined) ||
-  localStorage.getItem("qm.cos.briefUrl") ||
-  "http://localhost:8790/";
+  (import.meta.env.VITE_COS_BRIEF_URL as string | undefined) || localStorage.getItem("qm.cos.briefUrl") || "/cos/";
 
 export function renderBrief(): void {
   if (appState.currentView !== "brief" || !appState.mainEl) return;

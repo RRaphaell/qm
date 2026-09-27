@@ -3305,7 +3305,30 @@ export const handler = async (req: IncomingMessage, res: ServerResponse) => {
   }
 };
 
+// Chief of Staff: serve the Brief runtime same-origin under /cos/ so the Brief tab can frame it
+// without widening the CSP. COS_URL points at the runtime (default http://127.0.0.1:8790).
+const COS_URL = (process.env.COS_URL ?? "http://127.0.0.1:8790").replace(/\/$/, "");
+async function proxyCos(req: IncomingMessage, res: ServerResponse): Promise<void> {
+  const chunks: Buffer[] = [];
+  for await (const c of req) chunks.push(c as Buffer);
+  const path = (req.url ?? "/cos/").slice("/cos".length) || "/";
+  const up = await fetch(`${COS_URL}${path}`, {
+    method: req.method,
+    headers: { "content-type": String(req.headers["content-type"] ?? "application/json") },
+    body: req.method === "GET" || req.method === "HEAD" ? undefined : Buffer.concat(chunks),
+  });
+  res.writeHead(up.status, { "content-type": up.headers.get("content-type") ?? "text/html; charset=utf-8" });
+  res.end(Buffer.from(await up.arrayBuffer()));
+}
+
 const server = createServer((req, res) => {
+  if (req.url === "/cos" || req.url?.startsWith("/cos/")) {
+    void proxyCos(req, res).catch(() => {
+      if (!res.headersSent) json(res, 502, { error: "bad_gateway", message: "chief of staff runtime unreachable" });
+      else res.end();
+    });
+    return;
+  }
   void handler(req, res).catch((err: unknown) => {
     reportBackendError(err);
     console.error("%s", `[web-ui] 502 ${req.method ?? "?"} ${req.url ?? "?"}:`, String(err));

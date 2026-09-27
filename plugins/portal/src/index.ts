@@ -977,7 +977,8 @@ async function handle(req: IncomingMessage, res: ServerResponse): Promise<void> 
   res.setHeader("strict-transport-security", "max-age=63072000; includeSubDomains");
   res.setHeader("referrer-policy", "no-referrer");
   res.setHeader("x-content-type-options", "nosniff");
-  res.setHeader("x-frame-options", "DENY");
+  // Chief of Staff: the Brief tab frames /cos/ from this same origin; everything else stays DENY.
+  res.setHeader("x-frame-options", pathname === "/cos" || pathname.startsWith("/cos/") ? "SAMEORIGIN" : "DENY");
 
   const requestHost = (req.headers.host ?? "").toLowerCase().split(":")[0]!;
   const appSuffix = APPS_DOMAIN ? `.${APPS_DOMAIN.toLowerCase()}` : undefined;
