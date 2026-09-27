@@ -42,10 +42,10 @@ Built on 2026-09-27 at the YC "Own Your Intelligence" hackathon.
 ```bash
 # 1. GBrain: install, then load the seed brain
 export PATH=$HOME/.bun/bin:$PATH
-cd ~/hack && gbrain import seed/        # goals, people, projects, decisions, notes
+cd ~/hack && gbrain init && gbrain import seed/   # goals, people, projects, decisions, notes
 
 # 2. Chief of Staff runtime (serves the Brief and /api/capture on :8790)
-cd ~/hack/chief-of-staff && ./run.sh     # see chief-of-staff/README
+python3 chief-of-staff/cos/cos.py serve   # COS_PORT overrides 8790
 
 # 3. QM dev instance
 cd ~/hack/qm && npm ci && npm run dev    # open the web UI, then Browse -> Brief
