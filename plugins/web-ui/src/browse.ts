@@ -1,5 +1,18 @@
 import { html, nothing, render, type TemplateResult } from "lit";
-import { Box, Brain, Clock, Files, Folder, KeyRound, Repeat, Rocket, ShieldUser, Webhook, type IconNode } from "lucide";
+import {
+  Box,
+  Brain,
+  Sparkles,
+  Clock,
+  Files,
+  Folder,
+  KeyRound,
+  Repeat,
+  Rocket,
+  ShieldUser,
+  Webhook,
+  type IconNode,
+} from "lucide";
 import { deepLinkPath, isPlainLeftClick, UI_BASE } from "./deep-link";
 import { nextGridIndex } from "./grid-nav";
 import { setScopedSession } from "./session-scope";
@@ -37,6 +50,7 @@ export function destinations(): Destination[] {
     to("keychain", KeyRound, "Keychain", "Connected accounts and credentials"),
     to("deploys", Rocket, "Apps", "What QM has shipped for you"),
     to("memory", Brain, "Memory", "What QM remembers about your work"),
+    to("brief", Sparkles, "Brief", "Chief of Staff: goals, decisions, opportunities, ideas"),
     to("skills", Box, "Skills", "Reusable procedures QM can follow"),
   ];
   if (can("loops")) list.push(to("loops", Repeat, "Loops", "Standing work QM keeps pushing forward"));

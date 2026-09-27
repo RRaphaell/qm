@@ -26,6 +26,7 @@ import {
   Search,
   Settings,
   ShieldUser,
+  Sparkles,
   Webhook,
   type IconNode,
 } from "lucide";
@@ -91,6 +92,7 @@ import { attachTooltip, hideTooltip, tip } from "./tooltip";
 import { clearConnectorNotice, noteConnectorResult, renderConnectors, resetKeychainState } from "./connectors";
 import { openDeployById, renderDeploys } from "./deploys";
 import { renderMemory, resetMemoryState } from "./memory";
+import { renderBrief } from "./brief";
 import { renderCalendar } from "./calendar";
 import {
   inboxOpenCount,
@@ -223,6 +225,7 @@ const ICON = {
   crons: Clock,
   loops: Repeat,
   memory: Brain,
+  brief: Sparkles,
   skills: Box,
   home: House,
   browse: LayoutGrid,
@@ -746,6 +749,9 @@ export function switchView(v: View): void {
     case "memory":
       void renderMemory();
       break;
+    case "brief":
+      renderBrief();
+      break;
     case "skills":
       void renderSkills();
       break;
@@ -813,6 +819,9 @@ function refreshActiveView(v: View): void {
       break;
     case "memory":
       void renderMemory();
+      break;
+    case "brief":
+      renderBrief();
       break;
     case "skills":
       void renderSkills();

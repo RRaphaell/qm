@@ -32,6 +32,7 @@ const VIEWS = [
   "keychain",
   "deploys",
   "memory",
+  "brief",
   "skills",
   "settings",
 ] as const;

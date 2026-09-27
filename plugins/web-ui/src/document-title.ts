@@ -25,6 +25,7 @@ const VIEW_TITLES: Record<View, string> = {
   keychain: "Keychain",
   deploys: "Apps",
   memory: "Memory",
+  brief: "Brief",
   skills: "Skills",
   settings: "Settings",
 };
