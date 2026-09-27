@@ -11,7 +11,7 @@ flowchart LR
   U((You)) -- 10-min interview --> I[interview skill]
   I -- goals, constraints, unknowns --> G[(GBrain<br/>goal / decision / opportunity / brief pages)]
   L[QM Loop, every 3 h] --> C[cos runtime<br/>goal-check, originate, decide, brief]
-  G -- recall + search --> C
+  G -- gbrain export --> C
   C -- Brief: 4 cards, each with recommendation, default, expiry --> B[Brief tab in QM]
   B --> U
   U -- answer + note --> C
@@ -45,21 +45,21 @@ python3 chief-of-staff/cos/cos.py answer <id> skip --note "why"
 python3 chief-of-staff/cos/cos.py reflect              # answers -> learned rules
 # 5. QM with the Brief tab
 git clone -b chief-of-staff https://github.com/RRaphaell/qm && cd qm && npm ci && npm run dev
-# open the web UI, then Browse -> Brief (/brief); it frames http://localhost:8790/
-# (set VITE_COS_BRIEF_URL to point elsewhere)
+# open the web UI, then Brief in the sidebar (or Browse -> Brief); the web-ui server proxies
+# the cos runtime same-origin under /cos/ (set COS_URL to point elsewhere)
 ```
 
 GBrain on PGLite is single-writer: run one `gbrain` process at a time. The runtime queues its writes for that reason.
 
 ## What is new, what we reuse
 
-| New (this project)                                                          | Reused                                        |
-| --------------------------------------------------------------------------- | --------------------------------------------- |
-| `chief-of-staff` schema pack: goal, decision, opportunity, brief page types | GBrain storage, search, `remember` / `recall` |
-| Six skills: interview, goal-check, originate, decide, brief, learn-taste    | QM harness, chat, sandbox, skills runtime     |
-| cos runtime: ranking, Brief, answers, reflect, learned rules                | Claude (headless) for ideas and reflection    |
-| Brief tab in the QM web UI; a QM Loop definition (every 3 h)                | QM Loops and plugin shell                     |
-| Privacy filter: people cards and private goals are never shown              |                                               |
+| New (this project)                                                          | Reused                                     |
+| --------------------------------------------------------------------------- | ------------------------------------------ |
+| `chief-of-staff` schema pack: goal, decision, opportunity, brief page types | GBrain storage, `put`, `remember`          |
+| Six skills: interview, goal-check, originate, decide, brief, learn-taste    | QM harness, chat, sandbox, skills runtime  |
+| cos runtime: ranking, Brief, answers, reflect, learned rules                | Claude (headless) for ideas and reflection |
+| Brief tab in the QM web UI; a QM Loop definition (every 3 h)                | QM Loops and plugin shell                  |
+| Privacy filter: people cards and private goals are never shown              |                                            |
 
 ## Related work
 
@@ -71,6 +71,7 @@ GBrain on PGLite is single-writer: run one `gbrain` process at a time. The runti
 
 - Tested on one person's data: 443 real decisions from one Personal OS. No other users yet.
 - Reflect is simple: it groups answers by card kind, post author and words in your notes, and writes a rule once a group reaches 2 answers (demo mode) or 3. It has no guard against learning a wrong rule from a few answers.
+- The runtime reads the brain with one `gbrain export` at start and on reset, not per request through `recall`/`search`; answers, learned rules and interview pages go back through GBrain's write verbs. Goal progress comes from simple keyword matching on decisions.
 - The QM Loop (every 3 h) and the GBrain memory-provider example are config examples; during the hackathon the loop was run by hand, not on a schedule.
 - GBrain on PGLite allows one writer, so answers are written through a queue and can lag by a few seconds.
 - The privacy filter is a keyword list. It hides people cards and private goals in the demo, but it is not a guarantee.

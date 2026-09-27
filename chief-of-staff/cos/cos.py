@@ -1,11 +1,25 @@
 #!/usr/bin/env python3
 """cos: Chief of Staff runtime. Stdlib only. CLI + HTTP server (127.0.0.1:8790).
 Reads seed pages from disk (fast), keeps live state in out/state.json, writes to GBrain in a background queue."""
-import json, os, re, sys, threading, queue, subprocess, datetime, time, collections
+import shutil, json, os, re, sys, threading, queue, subprocess, datetime, time, collections
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SEED = os.environ.get("COS_SEED", "/home/ubuntu/hack/seed")
+
+def sync_from_gbrain():
+    """Read the brain from GBrain (gbrain export), so the Brief always reflects what the brain holds now."""
+    global SEED
+    dst = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "out", "brain")
+    env = dict(os.environ); env["PATH"] = "/home/ubuntu/.bun/bin:" + env.get("PATH", "")
+    try:
+        shutil.rmtree(dst, ignore_errors=True)
+        r = subprocess.run(["gbrain", "export", "--dir", dst], cwd="/home/ubuntu/hack", env=env, capture_output=True, text=True, timeout=60)
+        if r.returncode == 0 and os.path.isdir(os.path.join(dst, "decisions")):
+            SEED = dst; return True
+    except Exception:
+        pass
+    return False
 HACK = "/home/ubuntu/hack"
 OUT = os.path.join(ROOT, "out"); os.makedirs(OUT, exist_ok=True)
 STATE = os.path.join(OUT, "state.json")
@@ -43,13 +57,22 @@ def parse_page(path):
     m = re.match(r"---\n(.*?)\n---\n(.*)", t, re.S)
     if m:
         body = m.group(2)
-        for line in m.group(1).splitlines():
+        lines = m.group(1).splitlines()
+        for i, line in enumerate(lines):
             mm = re.match(r'(\w+):\s*(.*)', line)
             if mm:
                 v = mm.group(2).strip()
+                if v in (">-", ">", "|", "|-", ">+", "|+"):
+                    cont = []
+                    for nxt in lines[i + 1:]:
+                        if nxt.startswith("  "): cont.append(nxt.strip())
+                        else: break
+                    v = " ".join(cont)
                 if v.startswith('"') and v.endswith('"'):
                     try: v = json.loads(v)
                     except Exception: v = v[1:-1]
+                elif len(v) >= 2 and v.startswith("'") and v.endswith("'"):
+                    v = v[1:-1].replace("''", "'")
                 fm[mm.group(1)] = v
     return fm, body, t
 
@@ -220,6 +243,12 @@ class Brain:
             move = (nxt["title"][:90] + ("..." if len(nxt["title"]) > 90 else "")) if nxt else NEXT_MOVE[g["id"]]
             out.append({"id": g["id"], "title": g["title"], "status": status, "progress": pct, "done": done, "missed": miss,
                         "next_move": move, "next_id": nxt["id"] if nxt else None})
+        gd = os.path.join(SEED, "goals")
+        for f in sorted(os.listdir(gd)) if os.path.isdir(gd) else []:
+            fm, body, raw = parse_page(os.path.join(gd, f))
+            if "(QM chat)" in raw and "smoke" not in raw.lower():
+                out.insert(0, {"id": f[:-3], "title": fm.get("title", f[:-3])[:60], "status": "new", "progress": 0, "done": 0, "missed": 0,
+                               "next_move": "from your interview, saved in GBrain", "next_id": None})
         return out
 
     def handled(self):
@@ -417,6 +446,8 @@ class H(BaseHTTPRequestHandler):
             if p == "/api/reflect": return self.send(200, reflect())
             if p == "/api/capture": return self.send(200, capture(body))
             if p == "/api/reset":
+                global BR
+                if sync_from_gbrain(): BR = Brain()
                 with LOCK:
                     s = load_state(); ideas = s.get("ideas"); src = s.get("ideas_source")
                     s = {"answers": [], "weights": {}, "rules": [], "ideas": ideas, "ideas_source": src, "goal_status": {}, "events": []}
@@ -451,6 +482,7 @@ def serve(port=8790):
 
 def main(argv):
     global BR
+    sync_from_gbrain()
     BR = Brain()
     cmd = argv[1] if len(argv) > 1 else "run"
     if cmd == "serve": return serve(int(os.environ.get("COS_PORT", 8790)))
