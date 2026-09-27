@@ -69,6 +69,8 @@ test("draft stays outside AI chat and Send it submits the combined instruction",
         const send = host.querySelector<HTMLButtonElement>(".inbox-suggest-chip.primary")!;
         assert.equal(send.parentElement, host.querySelector(".inbox-chat-suggestions"));
         assert.equal(send.parentElement!.firstElementChild, send);
+        assert.equal(send.parentElement!.parentElement, host.querySelector(".inbox-chat"));
+        assert.equal(send.parentElement!.nextElementSibling, host.querySelector(".inbox-chat-composer"));
         assert.equal(host.querySelector(".inbox-chat-composer")!.textContent!.includes("Dismiss"), false);
         send.click();
         send.click();

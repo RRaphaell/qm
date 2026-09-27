@@ -1213,7 +1213,9 @@ export function chatTpl(item: InboxItem, compact = false): TemplateResult {
         ${item.thread.map(
           (m) => html`<div class="inbox-chat-msg ${m.role}"><span class="inbox-chat-text">${m.text}</span></div>`,
         )}
-        ${
+      </div>
+      ${busy ? html`<div class="inbox-chat-working">${workingWave()}<span>Thinking…</span></div>` : nothing}
+      ${
           item.status === "open"
             ? html`<div class="inbox-chat-suggestions">
                 ${
@@ -1245,8 +1247,6 @@ export function chatTpl(item: InboxItem, compact = false): TemplateResult {
               </div>`
             : nothing
         }
-      </div>
-      ${busy ? html`<div class="inbox-chat-working">${workingWave()}<span>Thinking…</span></div>` : nothing}
       <div class="inbox-chat-composer">
         ${embeddedComposer(
           `inbox:${appState.me?.user ?? "anon"}:${item.loopId}:${item.id}`,
