@@ -1,3 +1,5 @@
+> **This fork adds Chief of Staff, the goals layer for GBrain and QM** (YC Own Your Intelligence hackathon, 2026-09-27). Start here: [`chief-of-staff/`](chief-of-staff/) · [demo video](https://goofy-chive-qlt6e.shipped.run/)
+
 # qm
 
 A multiplayer agent harness for work. In Slack and on the web.
