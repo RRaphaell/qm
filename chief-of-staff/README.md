@@ -2,7 +2,32 @@
 
 **GBrain remembers what you know. QM does the work. Chief of Staff owns what you want, and brings you the few decisions only you can make.**
 
-Built at the YC "Own Your Intelligence" hackathon (2026-09-27) on [GBrain](https://github.com/garrytan/gbrain) and [QM](https://github.com/yc-software/qm). QM fork with the Brief tab: [RRaphaell/qm, branch `chief-of-staff`](https://github.com/RRaphaell/qm/tree/chief-of-staff).
+Built at the YC "Own Your Intelligence" hackathon (2026-09-27) on [GBrain](https://github.com/garrytan/gbrain) and [QM](https://github.com/yc-software/qm), by Raphael Kalandadze.
+
+**Demo video (1:50):** https://goofy-chive-qlt6e.shipped.run/ (also in this folder: [`demo/chief_of_staff.mp4`](demo/chief_of_staff.mp4))
+
+## The problem
+
+Agents now remember a lot and can do almost any task. None of them owns what you are trying to achieve. You still have to decide what matters today, notice the opportunity, and remember what you already said no to.
+
+## What it does, inside QM
+
+1. **Interview.** In QM's chat, say "Interview me". The interview skill asks one question at a time (goals and their metric, constraints, what you own and do not use, what would change your plan) and saves each answer into GBrain as you go.
+2. **Brief.** A new **Brief** tab in QM's sidebar shows your goals with progress, the four decisions only you can make (each with a recommendation, a default if you say nothing, and an expiry), ideas you did not ask for, opportunities, and what was handled without you.
+3. **Learning.** Every Done or Skip becomes a GBrain fact with provenance. **Reflect** turns repeated answers into a learned rule, shows the evidence, writes it into the brief skill, and the next Brief ranks differently.
+
+| Interview in QM chat, saved to GBrain | Brief tab in QM after Reflect learned a rule |
+| ------------------------------------- | -------------------------------------------- |
+| ![interview](demo/demo_chat_2.png)    | ![brief](demo/demo_brief_2.png)              |
+
+## What we changed in the QM fork (all on branch `chief-of-staff`)
+
+- `plugins/web-ui/src/brief.ts`, `shell.ts`, `browse.ts`: the Brief view, in the sidebar under Home and in Browse.
+- `plugins/web-ui/server/index.ts`: serves the Chief of Staff runtime same-origin under `/cos/`, so the tab needs no CSP change.
+- `plugins/portal/src/index.ts`: allows same-origin framing for `/cos/` only; every other path stays `DENY`.
+- `skills-seed/chief-of-staff-*`: six seeded skills (interview, goal-check, originate, decide, brief, learn-taste).
+- `loops/chief-of-staff.md`, `docs/chief-of-staff.md`: the Loop spec and the integration notes (GBrain as a QM memory provider).
+- `chief-of-staff/`: this folder: the `cos` runtime, the GBrain schema pack and skillpack, the demo.
 
 ## Architecture
 
@@ -44,7 +69,9 @@ python3 chief-of-staff/cos/cos.py serve                # Brief page on http://12
 python3 chief-of-staff/cos/cos.py answer <id> skip --note "why"
 python3 chief-of-staff/cos/cos.py reflect              # answers -> learned rules
 # 5. QM with the Brief tab
-git clone -b chief-of-staff https://github.com/RRaphaell/qm && cd qm && npm ci && npm run dev
+git clone -b chief-of-staff https://github.com/RRaphaell/qm && cd qm && npm ci
+COS_HOST=0.0.0.0 python3 chief-of-staff/cos/cos.py serve &   # the sandbox reaches it at host.docker.internal:8790
+HARNESS=claude npm run dev-instance:web -- --sandbox local
 # open the web UI, then Brief in the sidebar (or Browse -> Brief); the web-ui server proxies
 # the cos runtime same-origin under /cos/ (set COS_URL to point elsewhere)
 ```
